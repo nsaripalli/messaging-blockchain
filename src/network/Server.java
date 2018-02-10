@@ -58,18 +58,24 @@ public class Server implements Runnable {
     //create the socket server object
     //keep listens indefinitely until receives 'exit' call or program terminates
     try {
-      while (true) {
+      while (true) { // Runs once per request
+
         System.out.println("Waiting for client request");
-        Socket socket = this.server.accept();
+        Socket socket = this.server.accept(); // waits for client request
+
+        // Get message
         ObjectInputStream ois = new ObjectInputStream(socket.getInputStream());
         String message = (String) ois.readObject();
         System.out.println("Message Received: " + message + " from " + socket.getInetAddress());
+
+        // Reply to client
         ObjectOutputStream oos = new ObjectOutputStream(socket.getOutputStream());
         oos.writeObject("Message Recieved. Your IP is" + socket.getInetAddress());
+
+        // close everything
         ois.close();
         oos.close();
         socket.close();
-        //terminate the server if client sends exit request
       }
 
     } catch (IOException e) {

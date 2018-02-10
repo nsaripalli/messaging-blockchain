@@ -25,7 +25,9 @@ public class Client {
       oos.writeObject(message);
       ObjectInputStream ois = new ObjectInputStream(this.socket.getInputStream());
       String serverMessage = (String) ois.readObject();
-      System.out.println("Client: " + serverMessage);
+      if (!serverMessage.equals("received")) {
+        throw new IOException("server not responding");
+      }
       Thread.sleep(50); // why this?
       this.socket.close();
     } catch (IOException | ClassNotFoundException | InterruptedException e) {

@@ -4,6 +4,7 @@ import h804.Blockchain;
 import ui.Gui;
 
 import java.io.IOException;
+import java.net.InetAddress;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -46,8 +47,8 @@ public class NetworkController {
     this.gui.appendToChat(s);
   }
 
-  public void decodeMessage(String m) {
-    gui.appendToChat(blockchain.decode(m));
+  public void decodeMessage(String m, InetAddress ipaddr) {
+    gui.appendToChat(ipaddr + "> " + blockchain.decode(m));
   }
 
   public void sendMessage(String text) {

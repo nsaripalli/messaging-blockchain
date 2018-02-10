@@ -26,20 +26,13 @@ public class Server {
         // Get message
         ObjectInputStream ois = new ObjectInputStream(socket.getInputStream());
         String message = (String) ois.readObject();
-        System.out.println("Server Message Received: " + message + " from " + socket.getInetAddress());
 
         // Pass the message to the controller
-        controller.decodeMessage(message);
-
-        if (message.equals("heldlo!")) {
-          ois.close();
-          socket.close();
-          return;
-        }
+        controller.decodeMessage(message, socket.getInetAddress());
 
         // Reply to client
         ObjectOutputStream oos = new ObjectOutputStream(socket.getOutputStream());
-        oos.writeObject("Message Received. Your IP is" + socket.getInetAddress());
+        oos.writeObject("received");
 
         // close everything
         ois.close();

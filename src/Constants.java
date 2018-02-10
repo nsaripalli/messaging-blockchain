@@ -1,7 +1,7 @@
 import java.awt.* ;
 
 
-public class ColorPallete1 {
+public class Constants {
   public static final Color color1 = new Color(34,53,94);
   public static final Color color2 = new Color(53,51,96);
   public static final Color color3 = new Color(71,56,99);

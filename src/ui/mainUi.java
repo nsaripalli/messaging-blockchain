@@ -16,6 +16,13 @@ public class mainUi extends Application {
 
   @Override
   public void start(Stage primaryStage) {
-
+    Button connect = new Button();
+    connect.setText("Connect");
+    connect.setOnAction(new EventHandler<ActionEvent>() {
+      @Override
+      public void handle(ActionEvent event) {
+        System.out.
+      }
+    });
   }
 }

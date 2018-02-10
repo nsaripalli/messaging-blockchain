@@ -7,7 +7,6 @@ public class Main {
     Blockchain blockchain = new Blockchain();
 
 
-
   }
 
 }

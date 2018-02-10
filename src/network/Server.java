@@ -67,6 +67,13 @@ public class Server implements Runnable {
         ObjectInputStream ois = new ObjectInputStream(socket.getInputStream());
         String message = (String) ois.readObject();
         System.out.println("Message Received: " + message + " from " + socket.getInetAddress());
+        if (message.equals("heldlo!")) {
+          ois.close();
+          socket.close();
+          return;
+        }
+
+        System.out.println("FOWEIJHFOIWEJFOIWEJFOIWEJFOIWEJFOIWJEEFOIJWEOIFJWEOIFj");
 
         // Reply to client
         ObjectOutputStream oos = new ObjectOutputStream(socket.getOutputStream());

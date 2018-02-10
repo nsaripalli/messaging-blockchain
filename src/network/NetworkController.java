@@ -20,12 +20,8 @@ public class NetworkController {
     this.server = new Server(port, this);
     this.blockchain = blockchain;
     this.gui = gui;
-    relisten();
-  }
-
-  private void relisten() {
-    Thread serverThread = new Thread(server::run, "Server thread");
-    serverThread.start();
+    Thread curServerThread = new Thread(server::run, "Server thread");
+    curServerThread.start();
   }
 
   public void createNewClient(String hostname) {
@@ -33,6 +29,7 @@ public class NetworkController {
       clients.add(new Client(hostname, port, this));
     } catch (IOException e) {
       e.printStackTrace();
+      System.err.println("Couldn't resolve name: " + hostname);
     }
   }
 
@@ -49,8 +46,8 @@ public class NetworkController {
     this.gui.appendToChat(s);
   }
 
-  public String decodeMessage(String m) {
-    return blockchain.decode(m);
+  public void decodeMessage(String m) {
+    gui.appendToChat(blockchain.decode(m));
   }
 
   public void sendMessage(String text) {

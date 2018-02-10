@@ -5,6 +5,7 @@ import java.io.IOException;
 import h804.Blockchain;
 import javafx.application.Application;
 import javafx.event.ActionEvent;
+import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.scene.control.TextArea;
@@ -22,15 +23,16 @@ public class Gui extends Application {
   private static final int PORT = 13337;
 
   // FXML objects
+  @FXML
   public TextArea chatHistory;
+  @FXML
   public TextField hostNameEntry;
+  @FXML
   public TextField chatInput;
 
 
   @Override
   public void start(Stage primaryStage) {
-
-    initFields();
 
     this.primaryStage = primaryStage;
     this.primaryStage.setTitle("Hello world!");
@@ -41,17 +43,16 @@ public class Gui extends Application {
     initRootLayout();
   }
 
-  private void initFields() {
+  public void initialize() {
     Blockchain blockchain = new Blockchain();
     networkController = new NetworkController(PORT, blockchain, this);
   }
-
   private void initRootLayout() {
     try {
       // Load root layout from fxml file.
       FXMLLoader loader = new FXMLLoader();
       loader.setLocation(Gui.class.getResource("Gui.fxml"));
-      rootLayout =  loader.load();
+      rootLayout = loader.load();
 
       // Show the scene containing the root layout.
       Scene scene = new Scene(rootLayout);

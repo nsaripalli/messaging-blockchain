@@ -17,20 +17,11 @@ public class Server {
   }
 
   public void run() {
-    ServerSocket serverSocket;
     try {
-      serverSocket = new ServerSocket(port);
-    } catch (IOException e) {
-      e.printStackTrace();
-      return;
-    }
-
-    try {
-      while (true) { // Runs once per request
-
+      ServerSocket serverSocket = new ServerSocket(port);
+      while (true) {
         System.out.println("Server: Waiting for client request");
         Socket socket = serverSocket.accept(); // waits for client request
-        // FIXME: this doesn't work, accept() immediately fails and DOES NOT wait!!
 
         // Get message
         ObjectInputStream ois = new ObjectInputStream(socket.getInputStream());
@@ -46,8 +37,6 @@ public class Server {
           return;
         }
 
-        System.out.println("FOWEIJHFOIWEJFOIWEJFOIWEJFOIWEJFOIWJEEFOIJWEOIFJWEOIFj");
-
         // Reply to client
         ObjectOutputStream oos = new ObjectOutputStream(socket.getOutputStream());
         oos.writeObject("Message Received. Your IP is" + socket.getInetAddress());
@@ -57,10 +46,11 @@ public class Server {
         oos.close();
         socket.close();
       }
-
-    } catch (IOException|ClassNotFoundException e) {
+    } catch (IOException | ClassNotFoundException e) {
       e.printStackTrace();
       controller.sendUIMessage(e.getMessage());
     }
+
+
   }
 }

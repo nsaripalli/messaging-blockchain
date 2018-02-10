@@ -14,7 +14,7 @@
         <Button text="test" onAction="#handleConnectButtonAction" GridPane.columnIndex="0" GridPane.rowIndex="0" />
         <Label text="Host address:" GridPane.columnIndex="1" GridPane.rowIndex="0" />
         <TextField fx:id="hostNameEntry" GridPane.columnIndex="2" GridPane.rowIndex="0" />
-        <TextArea fx:id="chatHistory" editable="false" GridPane.columnIndex="0" GridPane.rowIndex="1" focusTraversable="false" />
+        <TextArea fx:id="chatHistory" text="" editable="false" GridPane.columnIndex="0" GridPane.rowIndex="1" focusTraversable="false" />
         <TextField fx:id="chatInput" GridPane.columnIndex="0" GridPane.rowIndex="2" />
     </GridPane>
 

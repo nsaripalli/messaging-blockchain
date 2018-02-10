@@ -1,44 +1,60 @@
 package network;
 
+import common.IObserver;
+import common.IRelay;
+import common.ISender;
+import common.ISubject;
+
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
+import java.lang.ClassNotFoundException;
 import java.net.ServerSocket;
 import java.net.Socket;
 
-public class Server {
 
-  private int port;
-  private NetworkController controller;
+/*
 
-  Server(int port, NetworkController controller) {
-    this.port = port;
-    this.controller = controller;
+example is
+
+    network.Server server = new network.Server(8000);
+    server.start();
+
+    Thread.sleep(30000);
+
+    server.stop();
+ */
+
+
+public class Server implements Runnable, ISender<String> {
+  private ServerSocket server;
+  private NetworkController networkController;
+
+  public Server(int port, NetworkController networkController) {
+    this.networkController = networkController;
+
+    try {
+      server = new ServerSocket(port);
+    } catch (IOException e) {
+      System.err.println("Server: Error while initializing Server Socket with port " + port);
+      e.printStackTrace();
+    }
   }
 
   public void run() {
-    ServerSocket serverSocket;
-    try {
-      serverSocket = new ServerSocket(port);
-    } catch (IOException e) {
-      e.printStackTrace();
-      return;
-    }
-
+    //create the socket server object
+    //keep listens indefinitely until receives 'exit' call or program terminates
     try {
       while (true) { // Runs once per request
 
         System.out.println("Server: Waiting for client request");
-        Socket socket = serverSocket.accept(); // waits for client request
+        Socket socket = this.server.accept(); // waits for client request
         // FIXME: this doesn't work, accept() immediately fails and DOES NOT wait!!
 
         // Get message
         ObjectInputStream ois = new ObjectInputStream(socket.getInputStream());
         String message = (String) ois.readObject();
         System.out.println("Server Message Received: " + message + " from " + socket.getInetAddress());
-
-        // Pass the message to the controller
-        controller.decodeMessage(message);
 
         if (message.equals("heldlo!")) {
           ois.close();
@@ -60,7 +76,7 @@ public class Server {
 
     } catch (IOException|ClassNotFoundException e) {
       e.printStackTrace();
-      controller.sendUIMessage(e.getMessage());
     }
+
   }
 }

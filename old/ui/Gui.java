@@ -2,7 +2,8 @@ package ui;
 
 import java.io.IOException;
 
-import h804.Blockchain;
+import common.*;
+import h804.Main;
 import javafx.application.Application;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXMLLoader;
@@ -12,26 +13,27 @@ import javafx.scene.control.TextField;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
+import network.Client;
 import network.NetworkController;
 
-public class Gui extends Application {
+public class Gui extends Application implements ISender<String>, IReceiver<String> {
 
   private Stage primaryStage;
   private AnchorPane rootLayout;
-  private static NetworkController networkController; //needs to be static?
-  private static final int PORT = 13337;
+  private GuiAdapter adapter;
 
   // FXML objects
   public TextArea chatHistory;
   public TextField hostNameEntry;
   public TextField chatInput;
 
+  public void start(GuiAdapter adapter) {
+    this.adapter = adapter;
+    launch();
+  }
 
   @Override
   public void start(Stage primaryStage) {
-
-    initFields();
-
     this.primaryStage = primaryStage;
     this.primaryStage.setTitle("Hello world!");
     this.primaryStage.setAlwaysOnTop(true);
@@ -39,11 +41,6 @@ public class Gui extends Application {
     this.primaryStage.setY(1080 / 2);
 
     initRootLayout();
-  }
-
-  private void initFields() {
-    Blockchain blockchain = new Blockchain();
-    networkController = new NetworkController(PORT, blockchain, this);
   }
 
   private void initRootLayout() {
@@ -62,23 +59,30 @@ public class Gui extends Application {
     }
   }
 
+  @Override
+  public void clientMessage(String message) {
+    chatHistory.appendText("Client: " + message + "\n");
+  }
+
+  @Override
+  public void serverMessage(String message) {
+    chatHistory.appendText("Server: " + message + "\n");
+  }
+
   public void handleConnectButtonAction(ActionEvent actionEvent) {
-    networkController.createNewClient(this.hostNameEntry.getText());
-    this.hostNameEntry.clear();
+    try {
+      hostNameEntry.setText("");
+    } catch (IOException e) {
+      e.printStackTrace();
+    }
   }
 
   public void handleKeyInput(KeyEvent keyEvent) {
     if (chatInput.isFocused()) {
       switch (keyEvent.getCode()) {
         case ENTER:
-          System.out.println(chatInput.getText());
-          networkController.sendMessage(chatInput.getText());
-          chatInput.clear();
+          System.out.println("Test");
       }
     }
-  }
-
-  public void appendToChat(String s) {
-    chatHistory.appendText(s);
   }
 }

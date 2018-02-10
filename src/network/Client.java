@@ -1,5 +1,7 @@
 package network;
 
+import h804.IObserver;
+
 import java.io.EOFException;
 import java.io.IOException;
 import java.io.ObjectInputStream;
@@ -8,23 +10,28 @@ import java.net.InetAddress;
 import java.net.Socket;
 import java.net.SocketException;
 import java.net.UnknownHostException;
-import java.rmi.UnexpectedException;
 
-public class Client {
+public class Client implements ISubject {
 
   InetAddress host;
   int port;
   Socket socket;
+  IObserver obs;
 
-  public Client(String host, int port) throws IOException {
+  public Client(String host, int port, IObserver obs) throws IOException {
     this.host = InetAddress.getByName(host);
     this.port = port;
+    this.obs = obs;
     try {
       this.socket = new Socket(this.host, port);
     } catch (IOException e) {
       this.socket = new Socket();
       System.out.println(e.getMessage());
     }
+  }
+
+  public void notifyObserver() {
+    return;
   }
 
   void sendMessage(String message) throws IOException, ClassNotFoundException, InterruptedException {
@@ -40,10 +47,5 @@ public class Client {
     } catch (SocketException e) {
       System.out.println("socket error: " + e.getMessage());
     }
-  }
-
-  public static void main(String[] args) throws UnknownHostException, IOException, ClassNotFoundException, InterruptedException {
-    Client myClient = new Client("localhost", 8000);
-    myClient.sendMessage("heldlo!");
   }
 }

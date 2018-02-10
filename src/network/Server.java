@@ -68,6 +68,7 @@ public class Server implements Runnable, ISubject {
 
         System.out.println("Server: Waiting for client request");
         Socket socket = this.server.accept(); // waits for client request
+        // FIXME: this doesn't work, accept() immediately fails and DOES NOT wait!!
 
         // Get message
         ObjectInputStream ois = new ObjectInputStream(socket.getInputStream());

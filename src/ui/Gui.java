@@ -3,6 +3,7 @@ package ui;
 import java.io.IOException;
 
 import common.IObserver;
+import h804.Main;
 import javafx.application.Application;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -17,11 +18,14 @@ public class Gui extends Application implements IObserver {
 
   private Stage primaryStage;
   private AnchorPane rootLayout;
+  private Main mainRef;
 
+  // FXML objects
   @FXML
   private TextField chatHistory;
 
-  public void start() {
+  public void start(Main main) {
+    this.mainRef = main;
     launch();
   }
 
@@ -54,16 +58,15 @@ public class Gui extends Application implements IObserver {
 
   @Override
   public void clientMessage(String message) {
-
+    chatHistory.appendText(message + "\n");
   }
 
   @Override
   public void serverMessage(String message) {
-
+    chatHistory.appendText(message + "\n");
   }
 
   public void handleConnectButtonAction(ActionEvent actionEvent) {
-    System.out.println("clicked!");
-    chatHistory.appendText("hello");
+//    mainRef.clients.add()
   }
 }

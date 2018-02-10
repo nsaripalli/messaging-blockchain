@@ -39,7 +39,8 @@ public class Main {
 		Thread guiThread = new Thread(gui::start);
 		guiThread.start();
 
-		Client client = new Client("localhost", CLIENT_PORT, gui);
+		// this initialization should really be called elsewhere.
+		Client client = new Client("localhost", SERVER_PORT, gui);
 	}
 
 	/**

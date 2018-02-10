@@ -4,8 +4,11 @@ import java.io.IOException;
 
 import common.IObserver;
 import javafx.application.Application;
+import javafx.event.ActionEvent;
+import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
+import javafx.scene.control.TextField;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
 import javafx.scene.control.Button;
@@ -14,6 +17,9 @@ public class Gui extends Application implements IObserver {
 
   private Stage primaryStage;
   private AnchorPane rootLayout;
+
+  @FXML
+  private TextField chatHistory;
 
   public void start() {
     launch();
@@ -26,19 +32,11 @@ public class Gui extends Application implements IObserver {
     this.primaryStage.setAlwaysOnTop(true);
     this.primaryStage.setX(1920 * 3/5);
     this.primaryStage.setY(1080 / 2);
-    Button connect = new Button();
-    connect.setText("Connect");
 
     initRootLayout();
-//    connect.setOnAction(() -> {
-//      @Override
-//      public void handle(ActionEvent event) {
-//        System.out.
-//      }
-//    });
   }
 
-  void initRootLayout() {
+  private void initRootLayout() {
     try {
       // Load root layout from fxml file.
       FXMLLoader loader = new FXMLLoader();
@@ -62,5 +60,10 @@ public class Gui extends Application implements IObserver {
   @Override
   public void serverMessage(String message) {
 
+  }
+
+  public void handleConnectButtonAction(ActionEvent actionEvent) {
+    System.out.println("clicked!");
+    chatHistory.appendText("hello");
   }
 }

@@ -10,5 +10,9 @@
             xmlns:fx="http://javafx.com/fxml"
             fx:controller="ui.Gui"
             prefHeight="400.0" prefWidth="600.0">
+    <GridPane>
+        <Button text="test" onAction="#handleConnectButtonAction" GridPane.columnIndex="0" GridPane.rowIndex="0"/>
+        <TextField editable="false" fx:id="chatHistory" GridPane.columnIndex="1" GridPane.rowIndex="0" focusTraversable="false" />
+    </GridPane>
 
 </AnchorPane>

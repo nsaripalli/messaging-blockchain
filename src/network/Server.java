@@ -9,6 +9,7 @@ import java.io.ObjectOutputStream;
 import java.lang.ClassNotFoundException;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.util.function.Function;
 
 
 /*
@@ -25,28 +26,24 @@ example is
 
 
 public class Server implements Runnable, ISubject {
-  private int port;
   private ServerSocket server;
   private Thread t;
   private String threadName = "server";
-  IObserver obs;
+  private IObserver obs;
 
   public Server(int port, IObserver obs) {
-    this.port = port;
     this.obs = obs;
+
     try {
-      server = new ServerSocket(this.port);
+      server = new ServerSocket(port);
     } catch (IOException e) {
-      System.out.println(e.getMessage());
+      System.err.println("Server: Error while initializing Server Socket with port " + port);
+      e.printStackTrace();
     }
   }
 
-  public void notifyObserver() {
-    return;
-  }
-
   public void start() {
-    System.out.println("Starting server!");
+    System.out.println("Server: Starting server!");
     if (t == null) {
       t = new Thread(this, threadName);
       t.start();
@@ -54,7 +51,7 @@ public class Server implements Runnable, ISubject {
   }
 
   public void stop() {
-    System.out.println("Shutting down Socket server!!");
+    System.out.println("Server: Shutting down Socket server!");
     //close the ServerSocket object
     try {
       this.server.close();
@@ -64,19 +61,22 @@ public class Server implements Runnable, ISubject {
   }
 
   public void run() {
-
     //create the socket server object
     //keep listens indefinitely until receives 'exit' call or program terminates
     try {
       while (true) { // Runs once per request
 
-        System.out.println("Waiting for client request");
+        System.out.println("Server: Waiting for client request");
         Socket socket = this.server.accept(); // waits for client request
 
         // Get message
         ObjectInputStream ois = new ObjectInputStream(socket.getInputStream());
         String message = (String) ois.readObject();
         System.out.println("Message Received: " + message + " from " + socket.getInetAddress());
+
+        // Inform the UI about the message
+        notifyObserver(message);
+
         if (message.equals("heldlo!")) {
           ois.close();
           socket.close();
@@ -87,7 +87,7 @@ public class Server implements Runnable, ISubject {
 
         // Reply to client
         ObjectOutputStream oos = new ObjectOutputStream(socket.getOutputStream());
-        oos.writeObject("Message Recieved. Your IP is" + socket.getInetAddress());
+        oos.writeObject("Message Received. Your IP is" + socket.getInetAddress());
 
         // close everything
         ois.close();
@@ -96,7 +96,7 @@ public class Server implements Runnable, ISubject {
       }
 
     } catch (IOException|ClassNotFoundException e) {
-      System.out.println(e.getMessage());
+      e.printStackTrace();
     }
 
   }

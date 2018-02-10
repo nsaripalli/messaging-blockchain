@@ -20,6 +20,7 @@ public class Client implements ISubject {
 
   public Client(String host, int port, IObserver obs) {
     this.obs = obs;
+
     try {
       this.host = InetAddress.getByName(host);
     } catch (UnknownHostException e) {

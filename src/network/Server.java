@@ -78,9 +78,7 @@ public class Server implements Runnable {
         socket.close();
       }
 
-    } catch (IOException e) {
-      System.out.println(e.getMessage());
-    } catch (ClassNotFoundException e) {
+    } catch (IOException|ClassNotFoundException e) {
       System.out.println(e.getMessage());
     }
 

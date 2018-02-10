@@ -29,13 +29,14 @@ public class Client implements ISubject {
 
     try {
       this.socket = new Socket(this.host, port);
+      this.sendMessage("request public key");
     } catch (IOException e) {
-      e.printStackTrace();
       this.socket = new Socket();
+      e.printStackTrace();
     }
   }
 
-  void sendMessage(String message) throws IOException, ClassNotFoundException, InterruptedException {
+  private void sendMessage(String message) {
     try {
       ObjectOutputStream oos = new ObjectOutputStream(this.socket.getOutputStream());
       oos.writeObject(message);
@@ -43,10 +44,11 @@ public class Client implements ISubject {
       String serverMessage = (String) ois.readObject();
       System.out.println("Reply: " + serverMessage);
       Thread.sleep(50);
-    } catch (EOFException e) {
-      System.out.println(e.getMessage());
-    } catch (SocketException e) {
-      System.out.println("socket error: " + e.getMessage());
+    } catch (IOException|ClassNotFoundException|InterruptedException e) {
+      String errMsg = "Client: Send message error" + e.getClass();
+      System.err.println(errMsg);
+      notifyObserver(errMsg);
+      e.printStackTrace();
     }
   }
 

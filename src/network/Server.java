@@ -73,7 +73,7 @@ public class Server implements Runnable, ISubject {
         // Get message
         ObjectInputStream ois = new ObjectInputStream(socket.getInputStream());
         String message = (String) ois.readObject();
-        System.out.println("Message Received: " + message + " from " + socket.getInetAddress());
+        System.out.println("Server Message Received: " + message + " from " + socket.getInetAddress());
 
         // Inform the UI about the message
         notifyObserver(message);

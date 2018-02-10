@@ -9,23 +9,19 @@ import org.bouncycastle.crypto.params.KeyParameter;
 import org.bouncycastle.util.encoders.Hex;
 
 public class Message {
-  private String sender;
   private String message;
 
   Message(String message) {
     this.message = message;
-    this.sender = ""; // TODO: See if there's a better way.
   }
 
   /**
    * Initialize a message with a sender and message. This is primarily used with group communication
    *
    * @param message
-   * @param sender
    */
   Message(String message, String sender) {
     this.message = message;
-    this.sender = sender;
   }
 
   String getMessage() {

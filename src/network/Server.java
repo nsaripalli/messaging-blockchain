@@ -1,10 +1,10 @@
 package network;
 
-import java.io.IOException;
-import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
-import java.net.ServerSocket;
-import java.net.Socket;
+    import java.io.IOException;
+    import java.io.ObjectInputStream;
+    import java.io.ObjectOutputStream;
+    import java.net.ServerSocket;
+    import java.net.Socket;
 
 public class Server {
 
@@ -27,14 +27,18 @@ public class Server {
         ObjectInputStream ois = new ObjectInputStream(socket.getInputStream());
         String message = (String) ois.readObject();
 
-        // Pass the message to the controller
-        controller.decodeMessage(message, socket.getInetAddress());
-
         // Reply to client
         ObjectOutputStream oos = new ObjectOutputStream(socket.getOutputStream());
-        oos.writeObject("received");
 
-        // close everything
+        // Pass the message to the controller
+        if (message.equals("give me your rsa please")) {
+          oos.writeObject(controller.getPublicKey());
+        } else {
+          controller.decodeMessage(message, socket.getInetAddress());
+          oos.writeObject(message);
+        }
+
+        // close socket
         ois.close();
         oos.close();
         socket.close();

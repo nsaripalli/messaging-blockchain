@@ -45,7 +45,7 @@ public class Gui extends Application {
 
   public void initialize() {
     Blockchain blockchain = new Blockchain();
-    networkController = new NetworkController(PORT, blockchain, this);
+    networkController = new NetworkController(PORT, blockchain,);
   }
   private void initRootLayout() {
     try {

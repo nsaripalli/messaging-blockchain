@@ -1,6 +1,6 @@
 package h804;
 
-public interface Observer {
+public interface IObserver {
   void updateClient(String message);
   void updateServer(String message);
 }

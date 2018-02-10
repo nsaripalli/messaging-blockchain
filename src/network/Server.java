@@ -1,5 +1,7 @@
 package network;
 
+import h804.IObserver;
+
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
@@ -21,19 +23,25 @@ example is
  */
 
 
-public class Server implements Runnable {
+public class Server implements Runnable, ISubject {
   private int port;
   private ServerSocket server;
   private Thread t;
   private String threadName = "server";
+  IObserver obs;
 
-  public Server(int port) {
+  public Server(int port, IObserver obs) {
     this.port = port;
+    this.obs = obs;
     try {
       server = new ServerSocket(this.port);
     } catch (IOException e) {
       System.out.println(e.getMessage());
     }
+  }
+
+  public void notifyObserver() {
+    return;
   }
 
   public void start() {

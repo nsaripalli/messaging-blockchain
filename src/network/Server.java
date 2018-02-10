@@ -1,6 +1,7 @@
 package network;
 
-import h804.IObserver;
+import common.IObserver;
+import common.ISubject;
 
 import java.io.IOException;
 import java.io.ObjectInputStream;
@@ -45,6 +46,7 @@ public class Server implements Runnable, ISubject {
   }
 
   public void start() {
+    System.out.println("Starting server!");
     if (t == null) {
       t = new Thread(this, threadName);
       t.start();
@@ -97,5 +99,10 @@ public class Server implements Runnable, ISubject {
       System.out.println(e.getMessage());
     }
 
+  }
+
+  @Override
+  public void notifyObserver(String str) {
+    obs.serverMessage(str);
   }
 }

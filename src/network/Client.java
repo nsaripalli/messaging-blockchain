@@ -1,6 +1,7 @@
 package network;
 
-import h804.IObserver;
+import common.IObserver;
+import common.ISubject;
 
 import java.io.EOFException;
 import java.io.IOException;
@@ -13,25 +14,24 @@ import java.net.UnknownHostException;
 
 public class Client implements ISubject {
 
-  InetAddress host;
-  int port;
-  Socket socket;
-  IObserver obs;
+  private InetAddress host;
+  private Socket socket;
+  private IObserver obs;
 
-  public Client(String host, int port, IObserver obs) throws IOException {
-    this.host = InetAddress.getByName(host);
-    this.port = port;
+  public Client(String host, int port, IObserver obs) {
     this.obs = obs;
+    try {
+      this.host = InetAddress.getByName(host);
+    } catch (UnknownHostException e) {
+      e.printStackTrace();
+    }
+
     try {
       this.socket = new Socket(this.host, port);
     } catch (IOException e) {
+      e.printStackTrace();
       this.socket = new Socket();
-      System.out.println(e.getMessage());
     }
-  }
-
-  public void notifyObserver() {
-    return;
   }
 
   void sendMessage(String message) throws IOException, ClassNotFoundException, InterruptedException {
@@ -47,5 +47,9 @@ public class Client implements ISubject {
     } catch (SocketException e) {
       System.out.println("socket error: " + e.getMessage());
     }
+  }
+
+  public void notifyObserver(String str) {
+    obs.clientMessage(str);
   }
 }

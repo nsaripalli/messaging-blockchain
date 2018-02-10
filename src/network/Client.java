@@ -10,7 +10,8 @@ import java.net.Socket;
 
 public class Client {
   private InetAddress host;
-  public static byte[] publicKey;
+  public byte[] publicKey;
+  public boolean publicKeyIsSet = false;
   private Socket socket;
   private int port;
   private NetworkController controller;
@@ -29,9 +30,10 @@ public class Client {
       ObjectInputStream ois = new ObjectInputStream(this.socket.getInputStream());
       String serverMessage = (String) ois.readObject();
       if (!serverMessage.equals(message)) {
-        if (message.equals("give me your rsa please")) {
+        if (message.equals("give me your rsa please") && !publicKeyIsSet) {
           System.out.println("Acquired key " + serverMessage + " for server " + this.host);
           publicKey = Hex.decode(serverMessage);
+          publicKeyIsSet = true;
         } else {
           System.out.println(serverMessage);
           System.out.println(message);

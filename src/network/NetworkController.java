@@ -1,7 +1,9 @@
 package network;
 
 import h804.Blockchain;
+import org.bouncycastle.jcajce.provider.asymmetric.RSA;
 import org.bouncycastle.util.encoders.Hex;
+import org.bouncycastle.crypto.engines.RSAEngine;
 //import ui.Gui;
 
 import java.io.IOException;
@@ -34,10 +36,20 @@ public class NetworkController {
     // server.close() to exit thread
   }
 
-  public void createNewClient(String hostname) {
+  public void createNewClient(String hostname) throws InterruptedException {
     try {
       Client client = new Client(hostname, port, this);
-      client.sendMessage("give me your rsa please");
+      while (!client.publicKeyIsSet) {
+        client.sendMessage("give me your rsa please");
+        Thread.sleep(300);
+      }
+
+      long mySeed = System.currentTimeMillis();
+
+      final byte[] cipherText = encrypt(Long.toString(mySeed), client.publicKey);
+
+      final String plainText = decrypt(cipherText, privKey);
+
       clients.add(client);
     } catch (IOException e) {
       e.printStackTrace();
@@ -92,6 +104,47 @@ public class NetworkController {
       System.exit(-1);
     }
 
+  }
+
+  public static byte[] encrypt(String text, PublicKey key) {
+    byte[] cipherText = null;
+    try {
+      // get an RSA cipher object and print the provider
+      final RSAEngine cipher = new RSAEngine();
+      // encrypt the plain text using the public key
+      cipher.init(key);
+      cipherText = cipher.doFinal(text.getBytes());
+    } catch (Exception e) {
+      e.printStackTrace();
+    }
+    return cipherText;
+  }
+
+  /**
+   * Decrypt text using private key.
+   *
+   * @param text
+   *          :encrypted text
+   * @param key
+   *          :The private key
+   * @return plain text
+   * @throws java.lang.Exception
+   */
+  public static String decrypt(byte[] text, PrivateKey key) {
+    byte[] dectyptedText = null;
+    try {
+      // get an RSA cipher object and print the provider
+      final Cipher cipher = Cipher.getInstance(ALGORITHM);
+
+      // decrypt the text using the private key
+      cipher.init(Cipher.DECRYPT_MODE, key);
+      dectyptedText = cipher.doFinal(text);
+
+    } catch (Exception ex) {
+      ex.printStackTrace();
+    }
+
+    return new String(dectyptedText);
   }
 
 }
